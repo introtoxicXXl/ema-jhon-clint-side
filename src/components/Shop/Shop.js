@@ -7,12 +7,17 @@ import Product from '../Product/Product';
 import './Shop.css';
 
 const Shop = () => {
-    const [products, setProducts] = useProducts();
     const [cart, setCart] = useState([]);
     const [pageCount, setPageCount] = useState(0);
     const [page, setPage] = useState(0);
+    const [size, setSize] = useState(10);
+    const [products, setProducts] = useState([]);
 
-
+    useEffect( () =>{
+        fetch(`http://localhost:5000/products?page=${page}&size=${size}`)
+        .then(res => res.json())
+        .then(data => setProducts(data));
+    }, [page,size]);
     useEffect(() => {
         fetch('http://localhost:5000/productCount')
             .then(res => res.json())
@@ -76,7 +81,7 @@ const Shop = () => {
                         </button>)
                     }
 
-                    <select name="" id="" className='buttonGroup'>
+                    <select onChange={e => setSize(e.target.value)} className='buttonGroup'>
                         <option value="5" selected>5</option>
                         <option value="10">10</option>
                         <option value="15">15</option>
